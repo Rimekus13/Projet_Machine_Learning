@@ -1,9 +1,40 @@
+import joblib
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import joblib
+
+
+def save_model(model, filename):
+    """
+    Sauvegarde un modèle entraîné dans un fichier.
+
+    Paramètres :
+    model : Le modèle entraîné à sauvegarder.
+    filename (str) : Nom du fichier de sauvegarde.
+    """
+    joblib.dump(model, filename)
+    # print(f"Modèle sauvegardé sous {filename}")
+
+
+def split_dataset(dataset, test_size=0.2):
+    """
+    Sépare un dataset en ensembles d'entraînement et de test.
+
+    Paramètres :
+    dataset (pd.DataFrame) : Le dataset contenant les features et la cible.
+    test_size (float) : Le pourcentage du dataset à allouer à l'ensemble de test.
+
+    Retourne :
+    X_train, X_test, y_train, y_test
+    """
+    X = dataset.iloc[:, :-1]  # Toutes les colonnes sauf la dernière (features)
+    y = dataset.iloc[:, -1]  # Dernière colonne (cible)
+
+    return train_test_split(X, y, test_size=test_size, random_state=42)
+
 
 def determine_clusters(df):
 
