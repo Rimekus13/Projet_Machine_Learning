@@ -6,6 +6,10 @@ Return : df -> the modified dataframe
 """
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
 
 def get_types(df) :
 
@@ -50,47 +54,53 @@ def removal_of_duplicates(df_params):
 
 
 def clear_missing_data(df):
-
-    if df.isnull().all().sum() != 0:
-        df.dropna(axis=1, how='all', inplace=True)
-    # If there are no empty rows, no operation is performed
-    else:
-        print("No empty rows")
-
-def delete_empty_percent(df, threshold):
     """
-    Identifies columns with more than threshold% missing values
+    Removes empty columns from the DataFrame
 
     Args:
         df (pandas.DataFrame): DataFrame containing missing values
 
     Returns:
-        pandas.Series, int: Result with more than 80% missing values
+        pandas.DataFrame: DataFrame without empty columns
     """
-    percent_missing = df.isnull().sum() * 100 / len(df)
-    percent_missing.sort_values(ascending=False, inplace=True)
+    missing_values = df.isnull().sum() / len(df) * 100
+  
 
-    threshold_view = 2
-    filtered = percent_missing[percent_missing.values > threshold_view]
+    empty_columns_count = missing_values[missing_values == 100].count()
+    print(f"Nombre de colonnes vides (100% de valeurs manquantes) : {empty_columns_count}")
 
-  #  threshold = 80
-    columns_to_drop = percent_missing[percent_missing.values > threshold].index
-    count_columns_to_drop = len(columns_to_drop)
+    df = df.dropna(axis=1, how='all')
 
-    columns_to_drop_details = percent_missing[percent_missing.values > threshold]
+    return df
 
-    return columns_to_drop_details, threshold
 
-def non_useful_columns(df_params):
+def delete_columnns_treshold(df, threshold=80):
+      
+    percent_missing = df.isnull().sum() * 100 / len(df) # Calculate how empty each columns are
+    percent_missing.sort_values(ascending=False, inplace=True) # Order them
+
+    filtered = percent_missing[percent_missing.values > threshold] # Keep only columns where empty% > Threshold
+    columns_to_drop = percent_missing[
+        percent_missing.values > threshold].index # Keep only the column name, we drop the percentages for now
+
+    df.drop(columns_to_drop, axis='columns', inplace=True) # Drop the columns
+    print(f"Les colonnes supprimées sont : {columns_to_drop}")
+    return df
+
+
+
+
+def non_useful_columns(df,df_params=None):
     """
     This function takes a DataFrame as a parameter, removes specific non-useful columns,
-    and returns a cleaned DataFrame.
+    and returns a cleaned DataFrame. If no DataFrame is provided, it returns a default list
+    of columns to be removed.
 
     Parameters:
-    df_params (DataFrame): The input DataFrame from which unnecessary columns will be removed.
+    df_params (DataFrame, optional): The input DataFrame from which unnecessary columns will be removed.
 
     Returns:
-    DataFrame: The DataFrame after removing the specified columns.
+    DataFrame or list: The DataFrame after removing the specified columns, or a list of default columns.
     """
     colonnes_a_supprimer = [
         "url", "created_t", "created_datetime", "last_modified_t", "last_modified_datetime",
@@ -99,6 +109,32 @@ def non_useful_columns(df_params):
         "image_small_url", "image_nutrition_url", "image_nutrition_small_url"
     ]
 
-    df_params = df_params.drop(columns=colonnes_a_supprimer)
-    return df_params
+    if df_params is None:
+        df_params = colonnes_a_supprimer
 
+    print(f"Les colonnes supprimées sont : {df_params}")
+
+    return df.drop(columns=df_params)
+
+def visualize(df, columns_to_drop, threshold):
+    """
+    Displays a graph of columns with too many missing values
+
+    Args:
+        df (pandas.DataFrame): 
+        columns_to_drop_details (pandas.Series): 
+        threshold (int): 
+
+    Returns:
+        pandas.DataFrame: The original DataFrame.
+    """
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x=columns_to_drop.index, y=columns_to_drop.values)
+    plt.xticks(rotation=90)
+    plt.xlabel('Colonnes')
+    plt.ylabel('% de valeurs manquantes')
+    plt.title(f"Colonnes avec plus de {threshold}% de valeurs manquantes")
+    plt.tight_layout()
+    plt.show()
+
+    return df
