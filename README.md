@@ -1,6 +1,9 @@
 Machine_Learning
 ==============================
 
+
+![Schéma du Pipeline ML](/Projet_Machine_Learning/image/ML.drawio.png)
+
 A short description of the project.
 
 Project Organization
