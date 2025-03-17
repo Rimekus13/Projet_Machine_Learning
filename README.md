@@ -2,7 +2,7 @@ Machine_Learning
 ==============================
 
 
-![Schéma du Pipeline ML](/Projet_Machine_Learning/image/ML.drawio.png)
+![Schéma du Pipeline ML](image/ML.drawio.png)
 
 A short description of the project.
 
