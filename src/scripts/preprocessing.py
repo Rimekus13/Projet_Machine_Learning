@@ -127,7 +127,7 @@ def non_useful_columns(df,df_params=None):
         "url", "created_t", "created_datetime", "last_modified_t", "last_modified_datetime",
         "last_modified_by", "last_updated_t", "brands_tags", "last_updated_datetime",
         "countries_tags", "countries_en", "states_tags", "states_en", "image_url",
-        "image_small_url", "image_nutrition_url", "image_nutrition_small_url"
+        "image_small_url", "image_nutrition_url", "image_nutrition_small_url","last_image_datetime"
     ]
 
     if df_params is None:
