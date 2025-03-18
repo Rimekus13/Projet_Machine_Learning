@@ -33,13 +33,11 @@ def word_cloud(df):
     for col, text in columns_values_list.items():
         # Générer le nuage de mots pour la colonne
         wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
-
         # Afficher le nuage de mots
         plt.figure(figsize=(10, 5))
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.title(f'Nuage de mots pour la colonne: {col}', fontsize=16)
         plt.axis('off')  # Masquer les axes
-        plt.show()
         filename = f"{output_folder}/wordcloud_kmeans_1000_{col}.png"
-        plt.savefig(filename)
-        plt.close()
+        plt.savefig(filename, bbox_inches='tight')
+
