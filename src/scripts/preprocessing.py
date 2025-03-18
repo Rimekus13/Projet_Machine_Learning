@@ -73,6 +73,27 @@ def clear_missing_data(df):
 
     return df
 
+import pandas as pd
+
+def clear_missing_line(df):
+    """
+    Removes empty rows from the DataFrame
+
+    Args:
+        df (pandas.DataFrame): DataFrame containing missing values
+
+    Returns:
+        pandas.DataFrame: DataFrame without empty rows
+    """
+    missing_values = df.isnull().sum(axis=1) / df.shape[1] * 100
+
+    empty_rows_count = missing_values[missing_values == 100].count()
+    print(f"Nombre de lignes vides (100% de valeurs manquantes) : {empty_rows_count}")
+
+    df = df.dropna(axis=0, how='all')
+
+    return df
+
 
 def delete_columnns_treshold(df, threshold=80):
       
@@ -138,3 +159,4 @@ def visualize(df, columns_to_drop, threshold):
     plt.show()
 
     return df
+#
