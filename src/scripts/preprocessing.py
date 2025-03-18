@@ -123,7 +123,7 @@ def non_useful_columns(df,df_params=None):
     Returns:
     DataFrame or list: The DataFrame after removing the specified columns, or a list of default columns.
     """
-    colonnes_a_supprimer = [
+    colonnes_a_supprimer = ["Unnamed: 0",
         "url", "created_t", "created_datetime", "last_modified_t", "last_modified_datetime",
         "last_modified_by", "last_updated_t", "brands_tags", "last_updated_datetime",
         "countries_tags", "countries_en", "states_tags", "states_en", "image_url",
