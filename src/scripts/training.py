@@ -89,3 +89,14 @@ def train_kmeans(df, nb_clusters=4):
 
     return grid_kmeans
 
+
+def predict_data(model, dataset):
+
+    '''
+    :param model: a pretrained/preoptimised  model
+    :param dataset: any dataset that's relevent for the model
+    :return: the predictions of the model
+    '''
+    predictions = model.predict(dataset)
+    return predictions
+
