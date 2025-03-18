@@ -40,3 +40,19 @@ def imputation_of_numerical_val(df_params):
     # Replace the original numerical columns with the imputed values
     df_params.loc[:, numeric_features.columns] = imputed_values
     return df_params
+
+def onehotencoder(df):
+
+    # Init, the argument 'sparse_output=False' ensure we get a dense matrix
+    encoder = OneHotEncoder(sparse_output=False)
+
+    # Apply onehotencoder to all categorical columns
+    encoded_columns = encoder.fit_transform(df.select_dtypes(include=['object']))
+
+    # Convert the encoded columns to a DataFrame and assign meaningful column names
+    encoded_df = pd.DataFrame(encoded_columns,columns=encoder.get_feature_names_out(df.select_dtypes(include=['object']).columns))
+
+    # Concatenate the encoded columns with the original DataFrame and drop the original categorical columns
+    df = pd.concat([df, encoded_df], axis=1).drop(columns=df.select_dtypes(include=['object']).columns)
+
+    return df
