@@ -1,5 +1,6 @@
 from sklearn.metrics import accuracy_score, f1_score, mean_squared_error
 from sklearn.model_selection import cross_val_score
+from sklearn.metrics import silhouette_score, davies_bouldin_score,calinski_harabasz_score
 
 def evaluate_model(model, X_test, y_test, metric='accuracy'):
     """Évalue le modèle sur l'ensemble de test."""
@@ -17,35 +18,27 @@ def cross_validate_model(model, X, y, cv=5):
     return scores.mean()
 
 def eval_silouhette(df_test, predictions):
+    """
+        :param predictions: any labels
+        :param df_test: any test dataset relevent for the model
+        """
     return silhouette_score(df_test, predictions)
 
 
-def eval_davies_bouldin(X, labels):
+def eval_davies_bouldin(df_test, predictions):
     """
-    Fonction qui prend un set de données (X) et des predictions (labels),
-    calcule l'indice de Davies-Bouldin et l'affiche.
-
-    :param model: Un modèle de clustering (ex : KMeans)
-    :param X: Un tableau de données (matrice de caractéristiques)
+    :param model: any trained model
+    :param df_test: Uany test dataset relevent for the model
     """
-    # Calculer l'indice de Davies-Bouldin
-    db_index = davies_bouldin_score(X, labels)
-
-    # Afficher l'indice
+    db_index = davies_bouldin_score(df_test, predictions)
     print(f"L'indice de Davies-Bouldin est: {db_index}")
 
 
-def calculer_et_afficher_calinski_harabasz(X, labels):
+def calculer_et_afficher_calinski_harabasz(X, predictions):
     """
-    Fonction qui prend un set de données (X) et des predictions (labels),
-    calcule l'indice de Calinski-Harabasz et l'affiche.
-
-    :param model: Un modèle de clustering (ex : KMeans)
-    :param X: Un tableau de données (matrice de caractéristiques)
+    :param model: any trained model
+    :param X: Uany test dataset relevent for the model
     """
 
-    # Calculer l'indice de Calinski-Harabasz
-    ch_index = calinski_harabasz_score(X, labels)
-
-    # Afficher l'indice
+    ch_index = calinski_harabasz_score(X, predictions)
     print(f"L'indice de Calinski-Harabasz est: {ch_index}")
