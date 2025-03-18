@@ -100,3 +100,30 @@ def predict_data(model, dataset):
     predictions = model.predict(dataset)
     return predictions
 
+
+import pandas as pd
+
+def marque_predominante_par_cluster(df, cluster_col, marque_col):
+    """
+    Identifie la marque prédominante dans chaque cluster.
+
+    :param df: DataFrame contenant les aliments avec leurs clusters et leurs marques.
+    :param cluster_col: Nom de la colonne contenant les numéros des clusters.
+    :param marque_col: Nom de la colonne contenant les marques des aliments.
+    :return: Un dictionnaire avec les clusters comme clés et la marque dominante comme valeur.
+    """
+    # Vérifier que les colonnes existent
+    if cluster_col not in df.columns or marque_col not in df.columns:
+        raise ValueError("Les colonnes spécifiées ne sont pas présentes dans le DataFrame.")
+
+    # Groupement des données et identification de la marque dominante
+    marque_predominante = (
+        df.groupby(cluster_col)[marque_col]
+        .agg(lambda x: x.value_counts().idxmax())  # Trouver la marque la plus fréquente
+    )
+
+    return marque_predominante.to_dict()
+
+
+
+
