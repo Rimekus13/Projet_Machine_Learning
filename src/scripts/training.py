@@ -99,3 +99,4 @@ def predict_data(model, dataset):
     '''
     predictions = model.predict(dataset)
     return predictions
+
