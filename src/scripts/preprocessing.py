@@ -73,6 +73,27 @@ def clear_missing_data(df):
 
     return df
 
+import pandas as pd
+
+def clear_missing_line(df):
+    """
+    Removes empty rows from the DataFrame
+
+    Args:
+        df (pandas.DataFrame): DataFrame containing missing values
+
+    Returns:
+        pandas.DataFrame: DataFrame without empty rows
+    """
+    missing_values = df.isnull().sum(axis=1) / df.shape[1] * 100
+
+    empty_rows_count = missing_values[missing_values == 100].count()
+    print(f"Nombre de lignes vides (100% de valeurs manquantes) : {empty_rows_count}")
+
+    df = df.dropna(axis=0, how='all')
+
+    return df
+
 
 def delete_columnns_treshold(df, threshold=80):
       
@@ -102,7 +123,7 @@ def non_useful_columns(df,df_params=None):
     Returns:
     DataFrame or list: The DataFrame after removing the specified columns, or a list of default columns.
     """
-    colonnes_a_supprimer = [
+    colonnes_a_supprimer = ["Unnamed: 0",
         "url", "created_t", "created_datetime", "last_modified_t", "last_modified_datetime",
         "last_modified_by", "last_updated_t", "brands_tags", "last_updated_datetime",
         "countries_tags", "countries_en", "states_tags", "states_en", "image_url",
@@ -138,3 +159,4 @@ def visualize(df, columns_to_drop, threshold):
     plt.show()
 
     return df
+#

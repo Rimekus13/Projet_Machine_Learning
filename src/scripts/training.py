@@ -36,23 +36,24 @@ def split_dataset(dataset, test_size=0.2):
     return train_test_split(X, y, test_size=test_size, random_state=42)
 
 
-def determine_clusters(df):
 
-    # Calculate the sum of the quadratics errors for each numbers of clusters
+def determine_clusters(df):
+    # Calculer la somme des erreurs quadratiques pour chaque nombre de clusters
     inertias = []
-    for i in range(1, 10):
-        kmeans = KMeans(n_clusters=i)
+    for i in range(1, 11):  # Correction ici : aller jusqu'à 10 inclus
+        kmeans = KMeans(n_clusters=i, random_state=42)
         kmeans.fit(df)
         inertias.append(kmeans.inertia_)
 
-    # Display the curve for inertia/cluster
+    # Afficher la courbe pour l'inertie/cluster
     plt.plot(range(1, 11), inertias)
-    plt.xlabel('Cluster ammount')
-    plt.ylabel('Inertia')
-    plt.title('Inertia per cluster')
+    plt.xlabel('Nombre de clusters')
+    plt.ylabel('Inertie')
+    plt.title('Inertie par cluster')
     plt.show()
 
     return plt
+
 
 
 def train_kmeans(df, nb_clusters=4):
