@@ -1,0 +1,91 @@
+import joblib
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+import joblib
+
+
+def save_model(model, filename):
+    """
+    Sauvegarde un modèle entraîné dans un fichier.
+
+    Paramètres :
+    model : Le modèle entraîné à sauvegarder.
+    filename (str) : Nom du fichier de sauvegarde.
+    """
+    joblib.dump(model, filename)
+    # print(f"Modèle sauvegardé sous {filename}")
+
+
+def split_dataset(dataset, test_size=0.2):
+    """
+    Sépare un dataset en ensembles d'entraînement et de test.
+
+    Paramètres :
+    dataset (pd.DataFrame) : Le dataset contenant les features et la cible.
+    test_size (float) : Le pourcentage du dataset à allouer à l'ensemble de test.
+
+    Retourne :
+    X_train, X_test, y_train, y_test
+    """
+    X = dataset.iloc[:, :-1]  # Toutes les colonnes sauf la dernière (features)
+    y = dataset.iloc[:, -1]  # Dernière colonne (cible)
+
+    return train_test_split(X, y, test_size=test_size, random_state=42)
+
+
+def determine_clusters(df):
+
+    # Calculate the sum of the quadratics errors for each numbers of clusters
+    inertias = []
+    for i in range(1, 10):
+        kmeans = KMeans(n_clusters=i)
+        kmeans.fit(df)
+        inertias.append(kmeans.inertia_)
+
+    # Display the curve for inertia/cluster
+    plt.plot(range(1, 11), inertias)
+    plt.xlabel('Cluster ammount')
+    plt.ylabel('Inertia')
+    plt.title('Inertia per cluster')
+    plt.show()
+
+    return plt
+
+
+def train_kmeans(df, nb_clusters=4):
+
+    # Initialize the KMeans model
+    kmeans = KMeans()
+
+    # Define parameters for GridSearch
+    param_grid = {
+        'n_clusters': [1,2,3,4,5,6,7,8,9],  # Around the specified nb_clusters
+        'init': ['k-means++', 'random'],  # Initialization methods
+        'max_iter': [300],  # Classic number of iterations
+        'n_init': [10]  # Classic number of restarts
+    }
+
+    # GridSearch
+    grid_search = GridSearchCV(estimator=kmeans, param_grid=param_grid, cv=3)
+    grid_search.fit(df)  # Training with GridSearch
+
+    # Best parameters found
+    best_params = grid_search.best_params_
+
+    # Create KMeans model with the best parameters found
+    grid_kmeans = KMeans(
+        n_clusters=best_params['n_clusters'],
+        init=best_params['init'],
+        max_iter=best_params['max_iter'],
+        n_init=best_params['n_init']
+    )
+
+
+    # Train the model with the best parameters found 
+    grid_kmeans.fit(df)
+
+    return grid_kmeans
+
