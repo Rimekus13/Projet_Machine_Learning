@@ -2,13 +2,14 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import KNNImputer
 
 import sys
 sys.path.append('../scripts')
 from preprocessing import clear_missing_data, delete_columnns_treshold, non_useful_columns, clear_missing_line, get_numerical, get_categorical, removal_of_duplicates
 from pretraitement import imputation_of_categorical_val, imputation_of_numerical_val, onehotencoder
-from training import determine_clusters, train_kmeans,predict_data
+from training import determine_clusters, train_kmeans,predict_data, visualize_with_tsne
 from visualize import word_cloud
 from evaluation import *
 from visualize import *
@@ -68,4 +69,4 @@ predictions = predict_data(model, df_num)
 # Ajouter les prédictions au DataFrame
 df_num['Cluster'] = predictions
 
-
+visualize_with_tsne(df_num, predictions)

@@ -54,6 +54,37 @@ def determine_clusters(df):
 
     return plt
 
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+
+def visualize_with_tsne(df_num, predictions, perplexity=30, random_state=42):
+    """
+    Réduit les dimensions d'un DataFrame avec PCA et t-SNE, puis visualise les résultats.
+
+    Paramètres :
+    - df_num : DataFrame contenant les données numériques.
+    - predictions : Série ou tableau contenant les prédictions ou labels pour la coloration des points.
+    - perplexity : Paramètre de perplexité pour t-SNE.
+    - random_state : Graine aléatoire pour la reproductibilité.
+    """
+    # Réduction à 2 dimensions avec PCA
+    pca = PCA(n_components=2)
+    df_pca = pca.fit_transform(df_num.drop(columns=['Cluster'], errors='ignore'))
+
+    # Application de t-SNE pour réduire à 2 dimensions
+    tsne = TSNE(n_components=2, perplexity=perplexity, random_state=random_state)
+    X_tsne = tsne.fit_transform(df_pca)
+
+    # Visualisation des résultats
+    plt.figure(figsize=(10, 8))
+    scatter = plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=predictions, cmap="tab10", alpha=0.7)
+    plt.colorbar(scatter, label="Classes")
+    plt.title(f"Visualisation des données avec t-SNE (Perplexité : {perplexity})")
+    plt.xlabel("Dimension 1")
+    plt.ylabel("Dimension 2")
+    plt.show()
 
 
 def train_kmeans(df, nb_clusters=4):
