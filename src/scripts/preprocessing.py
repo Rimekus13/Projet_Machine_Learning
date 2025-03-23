@@ -26,6 +26,16 @@ def get_categorical(df):
     return categorical_columns
 
 def downcast_floats(df,target=32):
+    """
+        This function will downcast floats to reduce dataset size and increase performances
+
+        Parameters:
+        df: The input DataFrame
+        target: the target size of the floats, can be either 16 or 32, anything else will provde an error
+
+        Returns:
+        DataFrame: The DataFrame downcasted.
+        """
     # Reduce float size to increase performance and reduce dataframe size
     # Target type can be ajusted from float32 to any that suits
     for col in df.select_dtypes(include=[np.float64]).columns:
@@ -73,7 +83,6 @@ def clear_missing_data(df):
 
     return df
 
-import pandas as pd
 
 def clear_missing_line(df):
     """
@@ -96,7 +105,17 @@ def clear_missing_line(df):
 
 
 def delete_columnns_treshold(df, threshold=80):
-      
+    """
+        Delte the column that are more empty then a threshold
+
+        Args:
+            df : DataFrame containing missing values
+            threshold : threshold for the column, if above, they are deleted
+
+        Returns:
+            df: DataFrame without threshold% emptiness
+    """
+
     percent_missing = df.isnull().sum() * 100 / len(df) # Calculate how empty each columns are
     percent_missing.sort_values(ascending=False, inplace=True) # Order them
 
