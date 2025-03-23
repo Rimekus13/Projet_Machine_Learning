@@ -5,6 +5,9 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import joblib
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+
 
 
 def save_model(model, filename):
@@ -38,6 +41,14 @@ def split_dataset(dataset, test_size=0.2):
 
 
 def determine_clusters(df):
+    """
+       Calcul l'inertie en fonction du nombre de clusters
+        Paramètres :
+        - df: DataFrame
+
+        Sortie :
+        Aucune sortie, seulement de l'affichage pour analyse visuelle
+        """
     # Calculer la somme des erreurs quadratiques pour chaque nombre de clusters
     inertias = []
     for i in range(1, 11):  # Correction ici : aller jusqu'à 10 inclus
@@ -54,10 +65,6 @@ def determine_clusters(df):
 
     return plt
 
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
 
 def visualize_with_tsne(df_num, predictions, perplexity=30, random_state=42):
     """
@@ -88,7 +95,15 @@ def visualize_with_tsne(df_num, predictions, perplexity=30, random_state=42):
 
 
 def train_kmeans(df, nb_clusters=4):
+    """
+        Entrainement un optimisation d'un kmeans
+        Paramètres :
+        - df : DataFrame
+        - nb_clusters : Nombre de cluster a créer par le modèle
 
+        Sortie :
+        - grid_kmeans : le modele kmeans entrainé et optimisé
+        """
     # Initialize the KMeans model
     kmeans = KMeans()
 
@@ -131,9 +146,6 @@ def predict_data(model, dataset):
     '''
     predictions = model.predict(dataset)
     return predictions
-
-
-import pandas as pd
 
 def marque_predominante_par_cluster(df, cluster_col, marque_col):
     """
