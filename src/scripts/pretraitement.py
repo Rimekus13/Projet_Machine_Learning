@@ -43,7 +43,14 @@ def imputation_of_numerical_val(df_params):
     return df_params
 
 def onehotencoder(df):
+    """
+        Onehotencoder to convert categories into column
+        Parameters:
+        df:  DataFrame
 
+        Returns:
+        df: the df that have been encoded
+        """
     # Init, the argument 'sparse_output=False' ensure we get a dense matrix
     encoder = OneHotEncoder(sparse_output=False)
 
