@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans
 import pandas as pd
 from wordcloud import WordCloud
 from preprocessing import get_categorical
-
+import os
 
 def mean_column_per_cluster(labels,dataset,cluster_id=1):
 
@@ -45,9 +45,6 @@ import os
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
-import os
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
 
 def word_cloud_for_cluster(df, cluster_number, predictions, output_folder="../../image/clusters"):
     """
@@ -83,7 +80,7 @@ def word_cloud_for_cluster(df, cluster_number, predictions, output_folder="../..
     # Créer un nuage de mots pour chaque colonne catégorielle
     for col, text in columns_values_list.items():
         # Générer le nuage de mots pour la colonne
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+        wordcloud = WordCloud(width=800, height=400, background_color='white',include_numbers=True).generate(text)
 
         # Afficher le nuage de mots
         plt.figure(figsize=(10, 5))
@@ -91,7 +88,7 @@ def word_cloud_for_cluster(df, cluster_number, predictions, output_folder="../..
         plt.title(f'Nuage de mots pour la colonne: {col} (Cluster {cluster_number})', fontsize=16)
         plt.axis('off')  # Masquer les axes
 
-        # Sauvegarder le nuage de mots dans le dossier spécifié
+        # Sauvegarder le nuage de mots
         filename = f"{output_folder}/wordcloud_cluster_{cluster_number}_{col}.png"
         try:
             plt.savefig(filename, bbox_inches='tight')
@@ -99,7 +96,7 @@ def word_cloud_for_cluster(df, cluster_number, predictions, output_folder="../..
         except Exception as e:
             print(f"Erreur lors de la sauvegarde de l'image : {e}")
 
-        plt.close()  # Fermer la figure pour libérer la mémoire
+        plt.close()
 
 # Exemple d'utilisation :
 # word_cloud_for_cluster(df, cluster_number=2, predictions=predictions)
