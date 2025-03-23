@@ -7,6 +7,17 @@ from preprocessing import get_categorical
 import os
 
 def mean_column_per_cluster(labels,dataset,cluster_id=1):
+    """
+        Affiche la moyenne des valeurs d'un cluster renseigné en argument, par defaut 1
+
+        Paramètres :
+        - labels : les prédictions d'un dataset
+        - dataset : un jeu de données
+        - cluster_id : numéro du cluster a visualisé
+
+        Sortie :
+        - Aucune sortie
+    """
 
     cluster_points = dataset[labels == cluster_id]
 
@@ -21,7 +32,16 @@ def mean_column_per_cluster(labels,dataset,cluster_id=1):
 
 
 def word_cloud(df):
+    """
+        Crée un nuage de mots pour les colonnes catégorielles d'un dataframe,
+        les nuages sont sauvegardés dans le dossier renseigné dans output_folder
 
+        Paramètres :
+        - df : DataFrame contenant les données.
+
+        Sortie :
+        - Aucune sortie
+        """
     output_folder = "../../image/kmeans_1000"
     # Récupérer les colonnes catégorielles du DataFrame
     df_cat = df.select_dtypes(exclude=['number'])
@@ -96,4 +116,24 @@ def word_cloud_for_cluster(df, cluster_number, predictions, output_folder="../..
 # Exemple d'utilisation :
 # word_cloud_for_cluster(df, cluster_number=2, predictions=predictions)
 
+
+def visualize_clusters_means(df_num):
+    """
+    Affiche la taille des clusters et la moyenne des colonnes par cluster
+
+    Paramètres :
+    - df_num : un datafrmae ne contenant que les variables numériques
+
+    Sortie :
+    - Aucune sortie, seulement de l'affichage pour analyse visuelle
+    """
+# Taille des clusters
+    cluster_sizes = df_num['Cluster'].value_counts()
+    print("Taille des clusters :")
+    print(cluster_sizes)
+
+# Statistiques descriptives par cluster
+    cluster_stats = df_num.groupby('Cluster').mean()
+    print("Statistiques descriptives par cluster :")
+    print(cluster_stats)
 
