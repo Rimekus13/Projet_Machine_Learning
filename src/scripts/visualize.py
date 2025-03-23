@@ -41,11 +41,6 @@ def word_cloud(df):
         filename = f"{output_folder}/wordcloud_kmeans_1000_{col}.png"
         plt.savefig(filename, bbox_inches='tight')
 
-import os
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-
-
 def word_cloud_for_cluster(df, cluster_number, predictions, output_folder="../../image/clusters"):
     """
     Crée un nuage de mots pour les colonnes catégorielles d'un cluster spécifique.
