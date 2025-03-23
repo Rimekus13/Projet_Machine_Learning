@@ -99,9 +99,47 @@ def word_cloud_for_cluster(df, cluster_number, predictions, output_folder="../..
         except Exception as e:
             print(f"Erreur lors de la sauvegarde de l'image : {e}")
 
-        plt.close()  # Fermer la figure pour libérer la mémoire
+        plt.close()  
 
-# Exemple d'utilisation :
-# word_cloud_for_cluster(df, cluster_number=2, predictions=predictions)
+
+
+
+
+def extract_cluster_data(df, cluster_number, predictions):
+    """
+    Extracts data for a specific cluster from a DataFrame.
+
+    Parameters:
+    - df: DataFrame containing the data.
+    - cluster_number: The cluster number to extract.
+    - predictions: Pandas Series containing the cluster labels.
+
+    Returns:
+    - A filtered DataFrame containing only the data for the specified cluster.
+    """
+    if len(df) != len(predictions):
+        raise ValueError("The number of rows in the DataFrame and predictions do not match.")
+
+    return df[predictions == cluster_number]  
+
+
+def calculate_columns_mean(df, column_names):
+    """
+    Calcule la moyenne de plusieurs colonnes spécifiées dans un DataFrame.
+
+    Paramètres :
+    df (pd.DataFrame) : Le DataFrame contenant les données.
+    column_names (list) : Une liste de noms de colonnes pour lesquelles calculer la moyenne.
+
+    Retourne :
+    dict : Un dictionnaire avec les noms des colonnes comme clés et leurs moyennes comme valeurs.
+    """
+    mean_values = {}
+    for column_name in column_names:
+        if column_name not in df.columns:
+            raise ValueError(f"La colonne '{column_name}' n'existe pas dans le DataFrame.")
+        mean_values[column_name] = df[column_name].mean()
+    return mean_values
+
 
 
